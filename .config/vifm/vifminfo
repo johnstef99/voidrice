@@ -1,0 +1,71 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+
+# Bookmarks:
+
+# TUI:
+al
+q0
+v2
+ov
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/home/john
+	johnstef.ovpn
+11
+
+# Right window history (oldest to newest):
+D/home/john
+	..
+0
+D/home
+	john
+1
+D/home/john
+	..
+0
+D/mnt
+	mtp
+2
+D/mnt/mtp
+	MicroSD
+1
+D/mnt/mtp/MicroSD
+	
+1
+D/mnt
+	..
+0
+D/
+	mnt
+8
+D/mnt
+	mtp
+2
+D/mnt/mtp
+	..
+0
+
+# Command line history (oldest to newest):
+:goto /mnt/mtp/
+:copy
+:delete
+
+# Search history (oldest to newest):
+
+# Prompt history (oldest to newest):
+
+# Local filter history (oldest to newest):
+
+# Registers:
+""/home/john/.local/share/vifm/Trash/001_fw_lavender_miui_LAVENDEREEAGlobal_V12.0.2.0.QFGEUXM_d20d8676c8_10.0.zip
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+t/home/john/.local/share/vifm/Trash/000_fw_lavender_miui_LAVENDEREEAGlobal_V12.0.2.0.QFGEUXM_d20d8676c8_10.0.zip
+	/mnt/mtp/fw_lavender_miui_LAVENDEREEAGlobal_V12.0.2.0.QFGEUXM_d20d8676c8_10.0.zip

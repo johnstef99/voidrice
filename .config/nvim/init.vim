@@ -1,149 +1,325 @@
-let mapleader =","
-
-if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
-	echo "Downloading junegunn/vim-plug to manage plugins..."
-	silent !mkdir -p ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/
-	silent !curl "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" > ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim
-	autocmd VimEnter * PlugInstall
-endif
-
-call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
-Plug 'tpope/vim-surround'
-Plug 'preservim/nerdtree'
-Plug 'junegunn/goyo.vim'
-Plug 'jreybert/vimagit'
-Plug 'lukesmithxyz/vimling'
-Plug 'vimwiki/vimwiki'
-Plug 'bling/vim-airline'
-Plug 'tpope/vim-commentary'
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')
+"Groff
+Plug 'Gavinok/vim-troff'
+"
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
+Plug 'scrooloose/nerdcommenter'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'morhetz/gruvbox'
+Plug 'dart-lang/dart-vim-plugin' " for flutter
+Plug 'vim-airline/vim-airline'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/syntastic'
+Plug 'dbeniamine/cheat.sh-vim'
+Plug 'puremourning/vimspector'
+Plug 'szw/vim-maximizer'
+Plug 'benmills/vimux'
+Plug 'bserem/vim-greek-spell'
+"themes
+Plug 'NLKNguyen/papercolor-theme'
+"html
+Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
+"latex
+Plug 'lervag/vimtex'
 call plug#end()
 
-set title
-set bg=light
-set go=a
+"==============Vim Settings=====================
+set ignorecase
 set mouse=a
-set nohlsearch
-set clipboard+=unnamedplus
-set noshowmode
-set noruler
-set laststatus=0
-set noshowcmd
+set nowrap
+set relativenumber
+set nu
+set smarttab
+set cindent
+set tabstop=2
+set shiftwidth=2
+" always uses spaces instead of tab characters
+set expandtab
+colorscheme gruvbox
+hi Normal guibg=NONE ctermbg=NONE
+set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-" Some basics:
-	nnoremap c "_c
-	set nocompatible
-	filetype plugin on
-	syntax on
-	set encoding=utf-8
-	set number relativenumber
-" Enable autocompletion:
-	set wildmode=longest,list,full
-" Disables automatic commenting on newline:
-	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-" Perform dot commands over visual blocks:
-	vnoremap . :normal .<CR>
-" Goyo plugin makes text more readable when writing prose:
-	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
-" Spell-check set to <leader>o, 'o' for 'orthography':
-	map <leader>o :setlocal spell! spelllang=en_us<CR>
-" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
-	set splitbelow splitright
 
-" Nerd tree
-	map <leader>n :NERDTreeToggle<CR>
-	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    if has('nvim')
-        let NERDTreeBookmarksFile = stdpath('data') . '/NERDTreeBookmarks'
-    else
-        let NERDTreeBookmarksFile = '~/.vim' . '/NERDTreeBookmarks'
-    endif
 
-" vimling:
-	nm <leader><leader>d :call ToggleDeadKeys()<CR>
-	imap <leader><leader>d <esc>:call ToggleDeadKeys()<CR>a
-	nm <leader><leader>i :call ToggleIPA()<CR>
-	imap <leader><leader>i <esc>:call ToggleIPA()<CR>a
-	nm <leader><leader>q :call ToggleProse()<CR>
 
-" Shortcutting split navigation, saving a keypress:
-	map <C-h> <C-w>h
-	map <C-j> <C-w>j
-	map <C-k> <C-w>k
-	map <C-l> <C-w>l
+"==============MAPS===========================
+inoremap jk <ESC>
+vmap <C-j> <Plug>(coc-snippets-select)
+imap <C-l> <Plug>(coc-snippets-expand)
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+nnoremap <silent> <space>r  :<C-u>CocListResume<CR>
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <space>d  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <space>a  :<C-u>CocAction<cr>
+"search for visually selected text
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+xmap <silent> <C-d> <Plug>(coc-range-select)
+nmap <silent> <C-d> <Plug>(coc-range-select)
+omap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+xmap if <Plug>(coc-funcobj-i)
+" Create mappings for function text object, requires document symbols feature of languageserver.
+nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Remap for do codeAction of current line
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+nmap <space><CR>  :call CocAction('format')<CR>
+xmap <space><CR>  :call CocAction('format')<CR>
+" Remap for format selected region
+nmap <F2> <Plug>(coc-rename)
+" Remap for rename current word
+inoremap <silent><expr> <M-Space> coc#refresh()
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gd <Plug>(coc-definition)
+" Remap keys for gotos
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+map <silent> <M-/> :let @/=""<CR>
+map <silent> <M-n> :tabnew<CR>
+map <silent> _ :resize -5<CR>
+map <silent> + :resize +5<CR>
+map <silent> - :vertical resize -5<CR>
+map <silent> = :vertical resize +5<CR>
+nnoremap <silent> <M-g> :GitFiles<CR>
+nnoremap <silent> <space>p :FZF<CR>
+nmap <M-e> :NERDTreeToggle<CR>
+nmap <space>m :MaximizerToggle<CR>
+"===========VimSpector==============
+nmap <space>vb :call vimspector#ToggleBreakpoint()<CR>
+nmap <space>vc :call vimspector#Continue()<CR>
+nmap <space>vr :VimspectorReset<CR>
+nmap <space>vd :CocCommand java.debug.vimspector.start<CR>
 
-" Replace ex mode with gq
-	map Q gq
 
-" Check file in shellcheck:
-	map <leader>s :!clear && shellcheck -x %<CR>
 
-" Open my bibliography file in split
-	map <leader>b :vsp<space>$BIB<CR>
-	map <leader>r :vsp<space>$REFER<CR>
+"============NerdTree config=======================
+let g:NERDTreeGitStatusWithFlags = 1
+"let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+"let g:NERDTreeGitStatusNodeColorization = 1
+"let g:NERDTreeColorMapCustom = {
+    "\ "Staged"    : "#0ee375",
+    "\ "Modified"  : "#d9bf91",
+    "\ "Renamed"   : "#51C9FC",
+    "\ "Untracked" : "#FCE77C",
+    "\ "Unmerged"  : "#FC51E6",
+    "\ "Dirty"     : "#FFBD61",
+    "\ "Clean"     : "#87939A",
+    "\ "Ignored"   : "#808080"
+    "\ }
+let g:NERDTreeIgnore = ['^node_modules$']
 
-" Replace all is aliased to S.
-	nnoremap S :%s//g<Left><Left>
+" sync open file with NERDTree
+" " Check if NERDTree is open or active
 
-" Compile document, be it groff/LaTeX/markdown/etc.
-	map <leader>c :w! \| !compiler "<c-r>%"<CR>
+" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
+" file, and we're not in vimdiff
 
-" Open corresponding .pdf/.html or preview
-	map <leader>p :!opout <c-r>%<CR><CR>
 
-" Runs a script that cleans out tex build files whenever I close out of a .tex file.
-	autocmd VimLeave *.tex !texclear %
+"=================COC config=========================
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+let g:coc_global_extensions = [
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-prettier',
+  \ 'coc-json',
+  \ ]
+" \ 'coc-eslint',
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+let g:coc_snippet_next = '<c-j>'
 
-" Ensure files are read as what I want:
-	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-	map <leader>v :VimwikiIndex
-	let g:vimwiki_list = [{'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
-	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
-	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-	autocmd BufRead,BufNewFile *.tex set filetype=tex
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
 
-" Save file as sudo on files that require root permission
-	cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
-" Enable Goyo by default for mutt writing
-	autocmd BufRead,BufNewFile /tmp/neomutt* let g:goyo_width=80
-	autocmd BufRead,BufNewFile /tmp/neomutt* :Goyo | set bg=light
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZZ :Goyo\|x!<CR>
-	autocmd BufRead,BufNewFile /tmp/neomutt* map ZQ :Goyo\|q!<CR>
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
 
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+"
 " Automatically deletes all trailing whitespace and newlines at end of file on save.
-	autocmd BufWritePre * %s/\s\+$//e
-    autocmd BufWritePre * %s/\n\+\%$//e
-    autocmd BufWritePre *.[ch] %s/\%$/\r/e
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritepre * %s/\n\+\%$//e
 
-" When shortcut files are updated, renew bash and ranger configs with new material:
-	autocmd BufWritePost bm-files,bm-dirs !shortcuts
-" Run xrdb whenever Xdefaults or Xresources are updated.
-	autocmd BufRead,BufNewFile xresources,xdefaults set filetype=xdefaults
-	autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
-" Recompile dwmblocks on config edit.
-	autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid -f dwmblocks }
+autocmd BufWritePost *.ms !groff -p -k -m ms -T ps "%:p" > "%:p:r.ps" && ps2pdf "%:p:r.ps"
 
-" Turns off highlighting on the bits of code that are changed, so the line that is changed is highlighted but the actual text that has changed stands out on the line and is readable.
-if &diff
-    highlight! link DiffText MatchParen
-endif
+autocmd BufWritePost *.mom !pdfmom "%:p" > "%:p:r.pdf"
+au! BufRead,BufNewFile *.mom    setfiletype mom
 
-" Function for toggling the bottom statusbar:
-let s:hidden_all = 1
-function! ToggleHiddenAll()
-    if s:hidden_all  == 0
-        let s:hidden_all = 1
-        set noshowmode
-        set noruler
-        set laststatus=0
-        set noshowcmd
-    else
-        let s:hidden_all = 0
-        set showmode
-        set ruler
-        set laststatus=2
-        set showcmd
-    endif
+
+au! BufRead,BufNewFile *.dart  source ~/.config/nvim/flutter_macros.vim
+au BufNewFile,BufRead *.ts setlocal filetype=typescript
+
+
+"==========================Functions=========================
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
 endfunction
-nnoremap <leader>h :call ToggleHiddenAll()<CR>
+
+function! SyncTree()
+  if &modifiable && IsNERDTreeOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+
+"==========================Python=========================
+au BufNewFile,BufRead *.py map <F5> :CocCommand python.execInTerminal<CR>
+"
+"==========================Bash=========================
+au BufNewFile,BufRead *.sh map <F5> :w<CR>:!bash %<CR>
+au BufNewFile,BufRead *.bash map <F5> :w<CR>:!bash %<CR>
+
+"=================DWM Blocs====================
+autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
+
+
+"=================Latex====================
+let g:tex_flavor = 'latex'
+au BufNewFile,BufRead *.tex map <space>c :w<CR> :!compiler %<CR><CR>
+
+
+"==========================Python=========================
+au BufNewFile,BufRead *.py map <F5> :CocCommand python.execInTerminal<CR>
+
+"=========================C++=========================
+au BufNewFile,BufRead *.cpp map <M-c> :!g++ -o  %:r.out %<CR>
+au BufNewFile,BufRead *.cpp map <M-x> :!./%:r.out<CR>
+
+"========================Java=========================
+au BufNewFile,BufRead *.java nmap <space>jc :w<CR>:!javac %<CR>
+au BufNewFile,BufRead *.java nmap <space>jd :w<CR>:VimuxRunCommand "javac ".expand("%")." && jrc ".expand("%:t:r")<CR>
+au BufNewFile,BufRead *.java nmap <space>jr :w<CR>:VimuxRunCommand "javac ".expand("%")." && java ".expand("%:t:r")<CR>
+
+"======================Markdown=========================
+au BufNewFile,BufRead *.md map <M-CR> :w<CR> :!pandoc % --pdf-engine=xelatex -V mainfont="Linux Libertine O" -o %:r.pdf<CR>
+
+
+"==========================Emmet=========================
+"let g:user_emmet_leader_key = ','
+
+"=======================Greek Stuff============================
+" always edit in utf-8:
+set encoding=utf-8
+" but be ready to change encoding with a couple of shortcuts:
+map _u :set encoding=utf-8
+map _1 :set encoding=iso-8859-1
+map _7 :set encoding=iso-8859-7
+" assign keyboard commands while using the greek keyboard:
+map Α A
+map Β B
+map Ψ C
+map Δ D
+map Ε E
+map Φ F
+map Γ G
+map Η H
+map Ι I
+map Ξ J
+map Κ K
+map Λ L
+map Μ M
+map Ν N
+map Ο O
+map Π P
+map Q Q
+map Ρ R
+map Σ S
+map Τ T
+map Θ U
+map Ω V
+map W W
+map Χ X
+map Υ Y
+map Ζ Z
+map α a
+map β b
+map ψ c
+map δ d
+map ε e
+map φ f
+map γ g
+map η h
+map ι i
+map ξ j
+map κ k
+map λ l
+map μ m
+map ν n
+map ο o
+map π p
+map q q
+map ρ r
+map σ s
+map τ t
+map θ u
+map ω v
+map ς w
+map χ x
+map υ y
+map ζ z

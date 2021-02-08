@@ -41,3 +41,13 @@ alias \
 	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/zshnameddirrc" \
 	weath="less -S ${XDG_DATA_HOME:-$HOME/.local/share}/weatherreport" \
 	tmux="tmux -f ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" \
+
+# johnstef was here
+ server_plex="johnstef@plex.johnstef.com"
+ server_touvlakia="johnstef@touvlakia.johnstef.com"
+ server_thmmy="johnstef@thmmy-mcs.duckdns.org"
+ server_johnstef="root@johnstef.com"
+ server_hass="root@johnstef.duckdns.org"
+ alias \
+   randombg="setbg ~/Files/wallpapers" \
+   flutter_devtools="flutter pub global run devtools" \

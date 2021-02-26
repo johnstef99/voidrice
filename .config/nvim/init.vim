@@ -14,7 +14,6 @@ Plug 'morhetz/gruvbox'
 Plug 'dart-lang/dart-vim-plugin' " for flutter
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/syntastic'
@@ -23,6 +22,8 @@ Plug 'puremourning/vimspector'
 Plug 'szw/vim-maximizer'
 Plug 'benmills/vimux'
 Plug 'bserem/vim-greek-spell'
+Plug 'wsdjeg/vim-todo'
+Plug 'ledger/vim-ledger'
 "themes
 Plug 'NLKNguyen/papercolor-theme'
 "html
@@ -125,6 +126,7 @@ nmap <space>vb :call vimspector#ToggleBreakpoint()<CR>
 nmap <space>vc :call vimspector#Continue()<CR>
 nmap <space>vr :VimspectorReset<CR>
 nmap <space>vd :CocCommand java.debug.vimspector.start<CR>
+noremap <space>t :vimgrep /TODO/j lib/**<CR>:cw<CR>
 
 
 
@@ -192,7 +194,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
-autocmd BufWritePost *.ms !groff -p -k -m ms -T ps "%:p" > "%:p:r.ps" && ps2pdf "%:p:r.ps"
+autocmd BufWritePost *.ms !groff -p -t -k -m ms -Tpdf "%:p" > "%:p:r.pdf"
 
 autocmd BufWritePost *.mom !pdfmom "%:p" > "%:p:r.pdf"
 au! BufRead,BufNewFile *.mom    setfiletype mom

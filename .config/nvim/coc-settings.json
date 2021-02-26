@@ -10,6 +10,7 @@
     "graphql",
     "dart"
   ],
-  "flutter.lsp.debug": false,
-  "java.errors.incompleteClasspath.severity": "ignore"
+  "java.errors.incompleteClasspath.severity": "ignore",
+  "flutter.lsp.debug": true,
+  "flutter.openDevLogSplitCommand": "botright 10split"
 }

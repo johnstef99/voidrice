@@ -9,8 +9,8 @@ alias \
 	mv="mv -iv" \
 	rm="rm -vI" \
 	mkd="mkdir -pv" \
-	yt="youtube-dl --add-metadata -i" \
-	yta="yt -x -f bestaudio/best" \
+	yt="youtube-dl -o \"%(title)s.%(ext)s\" --add-metadata -i" \
+	yta="yt --embed-thumbnail --metadata-from-title \"%(artist)s - %(title)s\" -x --audio-format mp3 --audio-quality 0" \
 	ffmpeg="ffmpeg -hide_banner"
 
 # Colorize commands when possible.
@@ -48,6 +48,16 @@ alias \
  server_thmmy="johnstef@thmmy-mcs.duckdns.org"
  server_johnstef="root@johnstef.com"
  server_hass="root@johnstef.duckdns.org"
+ server_vasi="root@vasiplay.gr"
  alias \
    randombg="setbg ~/Files/wallpapers" \
    flutter_devtools="flutter pub global run devtools" \
+   vsc='vim $(find ~/.local/bin | fzf)' \
+   kad='ka Discord' \
+   vifm='vifmrun' \
+   vm='vifm .' \
+   cfvm='vim ~/.config/vifm/vifmrc' \
+   fbb='flutter pub run build_runner build --delete-conflicting-outputs' \
+   fbw='flutter pub run build_runner watch --delete-conflicting-outputs' \
+   phonescreen='scrcpy -m 1920' \
+   owlradio="mpv https://streamer.radio.co/s3c139cbcf/listen"

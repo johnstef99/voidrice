@@ -3,6 +3,7 @@ call plug#begin('~/.vim/plugged')
 "Groff
 Plug 'Gavinok/vim-troff'
 "
+Plug 'vimwiki/vimwiki'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -194,7 +195,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
-autocmd BufWritePost *.ms !groff -p -t -k -m ms -Tpdf "%:p" > "%:p:r.pdf"
+autocmd BufWritePost *.ms !groff -p -t -k -mpdfmark -mms -Tpdf "%:p" > "%:p:r.pdf"
 
 autocmd BufWritePost *.mom !pdfmom "%:p" > "%:p:r.pdf"
 au! BufRead,BufNewFile *.mom    setfiletype mom

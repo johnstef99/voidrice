@@ -1,20 +1,25 @@
+"set leader to space
+let mapleader =" "
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 "Groff
 Plug 'Gavinok/vim-troff'
 "
+Plug 'stevearc/vim-arduino'
+Plug 'coddingtonbear/neomake-platformio'
 Plug 'vimwiki/vimwiki'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/nerdcommenter'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'morhetz/gruvbox'
 Plug 'dart-lang/dart-vim-plugin' " for flutter
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/syntastic'
@@ -64,15 +69,15 @@ inoremap jk <ESC>
 vmap <C-j> <Plug>(coc-snippets-select)
 imap <C-l> <Plug>(coc-snippets-expand)
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-nnoremap <silent> <space>r  :<C-u>CocListResume<CR>
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
-nnoremap <silent> <space>d  :<C-u>CocList diagnostics<cr>
-nnoremap <silent> <space>a  :<C-u>CocAction<cr>
+nnoremap <silent> <leader>r  :<C-u>CocListResume<CR>
+nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
+nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
+nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <leader>d  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>a  :<C-u>CocAction<cr>
 "search for visually selected text
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 xmap <silent> <C-d> <Plug>(coc-range-select)
@@ -83,17 +88,17 @@ xmap af <Plug>(coc-funcobj-a)
 xmap if <Plug>(coc-funcobj-i)
 " Create mappings for function text object, requires document symbols feature of languageserver.
 nmap <leader>qf  <Plug>(coc-fix-current)
-nmap <leader>ac  <Plug>(coc-codeaction)
+"nmap <leader>ac  <Plug>(coc-codeaction)
 " Remap for do codeAction of current line
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-xmap <leader>a  <Plug>(coc-codeaction-selected)
+"nmap <leader>a  <Plug>(coc-codeaction-selected)
+"xmap <leader>a  <Plug>(coc-codeaction-selected)
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-nmap <space><CR>  :call CocAction('format')<CR>
-xmap <space><CR>  :call CocAction('format')<CR>
+nmap <leader><CR>  :call CocAction('format')<CR>
+xmap <leader><CR>  :call CocAction('format')<CR>
 " Remap for format selected region
 nmap <F2> <Plug>(coc-rename)
 " Remap for rename current word
-inoremap <silent><expr> <M-Space> coc#refresh()
+inoremap <silent><expr> <C-Space> coc#refresh()
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -119,16 +124,31 @@ map <silent> + :resize +5<CR>
 map <silent> - :vertical resize -5<CR>
 map <silent> = :vertical resize +5<CR>
 nnoremap <silent> <M-g> :GitFiles<CR>
-nnoremap <silent> <space>p :FZF<CR>
+nnoremap <silent> <leader>p :FZF<CR>
 nmap <M-e> :NERDTreeToggle<CR>
-nmap <space>m :MaximizerToggle<CR>
+nmap <leader>m :MaximizerToggle<CR>
 "===========VimSpector==============
-nmap <space>vb :call vimspector#ToggleBreakpoint()<CR>
-nmap <space>vc :call vimspector#Continue()<CR>
-nmap <space>vr :VimspectorReset<CR>
-nmap <space>vd :CocCommand java.debug.vimspector.start<CR>
-noremap <space>t :vimgrep /TODO/j lib/**<CR>:cw<CR>
+nmap <leader>vb :call vimspector#ToggleBreakpoint()<CR>
+nmap <leader>vc :call vimspector#Continue()<CR>
+nmap <leader>vr :VimspectorReset<CR>
+nmap <leader>vd :CocCommand java.debug.vimspector.start<CR>
+noremap <leader>t :vimgrep /TODO/j lib/**<CR>:cw<CR>
+map <leader>x :w! \| !compiler "<c-r>%"<CR>
 
+
+"============Arduino config=======================
+let g:arduino_cmd = '/usr/bin/arduino'
+let g:arduino_dir = '/usr/share/arduino'
+let g:arduino_home_dir = $HOME . "/.arduino15"
+function! MyStatusLine()
+  let port = arduino#GetPort()
+  let line = '%f [' . g:arduino_board . '] [' . g:arduino_programmer . ']'
+  if !empty(port)
+    let line = line . ' (' . port . ':' . g:arduino_serial_baud . ')'
+  endif
+  return line
+endfunction
+autocmd BufNewFile,BufRead *.ino let g:airline_section_x='%{MyStatusLine()}'
 
 
 "============NerdTree config=======================
@@ -241,11 +261,8 @@ au BufNewFile,BufRead *.bash map <F5> :w<CR>:!bash %<CR>
 "=================DWM Blocs====================
 autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/; sudo make install && { killall -q dwmblocks;setsid dwmblocks & }
 
-
 "=================Latex====================
 let g:tex_flavor = 'latex'
-au BufNewFile,BufRead *.tex map <space>c :w<CR> :!compiler %<CR><CR>
-
 
 "==========================Python=========================
 au BufNewFile,BufRead *.py map <F5> :CocCommand python.execInTerminal<CR>
@@ -255,9 +272,9 @@ au BufNewFile,BufRead *.cpp map <M-c> :!g++ -o  %:r.out %<CR>
 au BufNewFile,BufRead *.cpp map <M-x> :!./%:r.out<CR>
 
 "========================Java=========================
-au BufNewFile,BufRead *.java nmap <space>jc :w<CR>:!javac %<CR>
-au BufNewFile,BufRead *.java nmap <space>jd :w<CR>:VimuxRunCommand "javac ".expand("%")." && jrc ".expand("%:t:r")<CR>
-au BufNewFile,BufRead *.java nmap <space>jr :w<CR>:VimuxRunCommand "javac ".expand("%")." && java ".expand("%:t:r")<CR>
+au BufNewFile,BufRead *.java nmap <leader>jc :w<CR>:!javac %<CR>
+au BufNewFile,BufRead *.java nmap <leader>jd :w<CR>:VimuxRunCommand "javac ".expand("%")." && jrc ".expand("%:t:r")<CR>
+au BufNewFile,BufRead *.java nmap <leader>jr :w<CR>:VimuxRunCommand "javac ".expand("%")." && java ".expand("%:t:r")<CR>
 
 "======================Markdown=========================
 au BufNewFile,BufRead *.md map <M-CR> :w<CR> :!pandoc % --pdf-engine=xelatex -V mainfont="Linux Libertine O" -o %:r.pdf<CR>

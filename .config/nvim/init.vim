@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'Gavinok/vim-troff'
 "
 Plug 'stevearc/vim-arduino'
+Plug 'sudar/vim-arduino-syntax'
 Plug 'coddingtonbear/neomake-platformio'
 Plug 'vimwiki/vimwiki'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -53,7 +54,7 @@ set shiftwidth=2
 set expandtab
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
-set hidden " Some servers have issues with backup files, see #649 set nobackup set nowritebackup " Better display for messages set cmdheight=2 " You will have bad experience for diagnostic messages when it's default 4000.
+set hidden
 set updatetime=300
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
@@ -65,10 +66,10 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 
 "==============MAPS===========================
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 inoremap jk <ESC>
 vmap <C-j> <Plug>(coc-snippets-select)
 imap <C-l> <Plug>(coc-snippets-expand)
-cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 nnoremap <silent> <leader>r  :<C-u>CocListResume<CR>
 nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
 nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
@@ -115,6 +116,13 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 map <silent> <M-/> :let @/=""<CR>
@@ -123,8 +131,7 @@ map <silent> _ :resize -5<CR>
 map <silent> + :resize +5<CR>
 map <silent> - :vertical resize -5<CR>
 map <silent> = :vertical resize +5<CR>
-nnoremap <silent> <M-g> :GitFiles<CR>
-nnoremap <silent> <leader>p :FZF<CR>
+nnoremap <silent> <leader>p :GitFiles<CR>
 nmap <M-e> :NERDTreeToggle<CR>
 nmap <leader>m :MaximizerToggle<CR>
 "===========VimSpector==============
@@ -140,15 +147,22 @@ map <leader>x :w! \| !compiler "<c-r>%"<CR>
 let g:arduino_cmd = '/usr/bin/arduino'
 let g:arduino_dir = '/usr/share/arduino'
 let g:arduino_home_dir = $HOME . "/.arduino15"
+
 function! MyStatusLine()
   let port = arduino#GetPort()
-  let line = '%f [' . g:arduino_board . '] [' . g:arduino_programmer . ']'
+  let line = '[' . g:arduino_board . '] [' . g:arduino_programmer . ']'
   if !empty(port)
     let line = line . ' (' . port . ':' . g:arduino_serial_baud . ')'
   endif
   return line
 endfunction
+
 autocmd BufNewFile,BufRead *.ino let g:airline_section_x='%{MyStatusLine()}'
+autocmd FileType arduino nnoremap <leader>q :bd!<CR>
+autocmd FileType arduino nnoremap <leader>u :ArduinoUpload<CR>
+autocmd FileType arduino nnoremap <leader>s :ArduinoSerial<CR>
+autocmd FileType arduino nnoremap <leader>b :ArduinoChooseBoard<CR>
+autocmd FileType arduino nnoremap <leader>p :ArduinoChoosePort<CR>
 
 
 "============NerdTree config=======================
@@ -215,7 +229,7 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
-autocmd BufWritePost *.ms !groff -p -t -k -mpdfmark -mms -Tpdf "%:p" > "%:p:r.pdf"
+autocmd BufWritePost *.ms !pdfroff -G -e -p -t -k -mpdfmark -ms "%:p" > "%:p:r.pdf"
 
 autocmd BufWritePost *.mom !pdfmom "%:p" > "%:p:r.pdf"
 au! BufRead,BufNewFile *.mom    setfiletype mom

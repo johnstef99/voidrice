@@ -1,42 +1,58 @@
 "set leader to space
 let mapleader =" "
 
+" ============ Plugins Setup ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
-"Groff
-Plug 'Gavinok/vim-troff'
-"
-Plug 'stevearc/vim-arduino'
-Plug 'sudar/vim-arduino-syntax'
-Plug 'coddingtonbear/neomake-platformio'
-Plug 'vimwiki/vimwiki'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
+
+" Navigation
+Plug 'nvim-lua/popup.nvim' " required by telescope
+Plug 'nvim-lua/plenary.nvim' " required by telescope
+Plug 'nvim-lua/telescope.nvim' " best fuzzy finder
+Plug 'scrooloose/nerdtree' " files tree
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'jmckiern/vim-venter' " zen mode
+
+" LSP
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dart-lang/dart-vim-plugin' " for flutter
+
+" Git
+Plug 'tpope/vim-fugitive'
+
+" Colorscemes - Themes
+Plug 'morhetz/gruvbox'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'ryanoasis/vim-devicons'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'morhetz/gruvbox'
-Plug 'dart-lang/dart-vim-plugin' " for flutter
 Plug 'vim-airline/vim-airline'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+
+" Syntax
+Plug 'jceb/vim-orgmode'
+"Plug 'axvr/org.vim'
+Plug 'tpope/vim-cucumber'
 Plug 'leafgarland/typescript-vim'
-Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/syntastic'
-Plug 'dbeniamine/cheat.sh-vim'
-Plug 'puremourning/vimspector'
+Plug 'ledger/vim-ledger'
+
+" Arduino
+Plug 'stevearc/vim-arduino'
+Plug 'sudar/vim-arduino-syntax'
+
+" Tools
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'szw/vim-maximizer'
 Plug 'benmills/vimux'
 Plug 'bserem/vim-greek-spell'
-Plug 'wsdjeg/vim-todo'
-Plug 'ledger/vim-ledger'
-"themes
-Plug 'NLKNguyen/papercolor-theme'
-"html
+Plug 'dbeniamine/cheat.sh-vim'
+
+" HTML
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-css-color'
-"latex
+
+" Groff
+Plug 'Gavinok/vim-troff'
+
+" Latex
 Plug 'lervag/vimtex'
 call plug#end()
 
@@ -66,6 +82,9 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 
 "==============MAPS===========================
+nmap spg :set spell spelllang=el<CR>
+nmap spu :set spell spelllang=en<CR>
+nmap spn :set nospell<CR>
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 inoremap jk <ESC>
 vmap <C-j> <Plug>(coc-snippets-select)
@@ -131,14 +150,16 @@ map <silent> _ :resize -5<CR>
 map <silent> + :resize +5<CR>
 map <silent> - :vertical resize -5<CR>
 map <silent> = :vertical resize +5<CR>
-nnoremap <silent> <leader>p :GitFiles<CR>
+nnoremap <silent> <leader>p :Telescope git_files<CR>
 nmap <M-e> :NERDTreeToggle<CR>
 nmap <leader>m :MaximizerToggle<CR>
+nmap <leader>z :tabe %<CR>:VenterToggle<CR>
+
 "===========VimSpector==============
-nmap <leader>vb :call vimspector#ToggleBreakpoint()<CR>
-nmap <leader>vc :call vimspector#Continue()<CR>
-nmap <leader>vr :VimspectorReset<CR>
-nmap <leader>vd :CocCommand java.debug.vimspector.start<CR>
+"nmap <leader>vb :call vimspector#ToggleBreakpoint()<CR>
+"nmap <leader>vc :call vimspector#Continue()<CR>
+"nmap <leader>vr :VimspectorReset<CR>
+"nmap <leader>vd :CocCommand java.debug.vimspector.start<CR>
 noremap <leader>t :vimgrep /TODO/j lib/**<CR>:cw<CR>
 map <leader>x :w! \| !compiler "<c-r>%"<CR>
 
@@ -181,13 +202,6 @@ let g:NERDTreeGitStatusWithFlags = 1
     "\ }
 let g:NERDTreeIgnore = ['^node_modules$']
 
-" sync open file with NERDTree
-" " Check if NERDTree is open or active
-
-" Call NERDTreeFind iff NERDTree is active, current window contains a modifiable
-" file, and we're not in vimdiff
-
-
 "=================COC config=========================
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 let g:coc_global_extensions = [
@@ -229,7 +243,12 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritepre * %s/\n\+\%$//e
 
-autocmd BufWritePost *.ms !pdfroff -G -e -p -t -k -mpdfmark -ms "%:p" > "%:p:r.pdf"
+"================Groff====================================
+au! BufRead,BufNewFile *.grap setfiletype psf
+au! BufRead,BufNewFile *.ms noremap <leader>v :!setsid zathura "%:p:r.pdf"<CR>
+au! BufRead,BufNewFile *.ms set makeprg=compiler\ %
+autocmd BufWritePost *.ms !compiler %
+"!groff -Geptk -ms -Tps "%:p" > "%:p:r.ps" && ps2pdf "%:p:r.ps" > "%:p:r.pdf" && rm "%:p:r.ps" > /dev/null
 
 autocmd BufWritePost *.mom !pdfmom "%:p" > "%:p:r.pdf"
 au! BufRead,BufNewFile *.mom    setfiletype mom
@@ -277,6 +296,9 @@ autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/
 
 "=================Latex====================
 let g:tex_flavor = 'latex'
+au! BufRead,BufNewFile *.tex noremap <F12> :!setsid zathura "%:r.pdf"<CR>
+au! BufRead,BufNewFile *.tex set makeprg=make
+autocmd BufWritePost *.tex make
 
 "==========================Python=========================
 au BufNewFile,BufRead *.py map <F5> :CocCommand python.execInTerminal<CR>
@@ -293,6 +315,8 @@ au BufNewFile,BufRead *.java nmap <leader>jr :w<CR>:VimuxRunCommand "javac ".exp
 "======================Markdown=========================
 au BufNewFile,BufRead *.md map <M-CR> :w<CR> :!pandoc % --pdf-engine=xelatex -V mainfont="Linux Libertine O" -o %:r.pdf<CR>
 
+"======================Vener=========================
+let g:venter_width = &columns/6
 
 "==========================Emmet=========================
 "let g:user_emmet_leader_key = ','
@@ -357,3 +381,5 @@ map ς w
 map χ x
 map υ y
 map ζ z
+map γ; gq
+map ψις ciw

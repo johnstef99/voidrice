@@ -28,6 +28,7 @@ Plug 'vim-airline/vim-airline'
 
 " Syntax
 Plug 'jceb/vim-orgmode'
+Plug 'vim-scripts/utl.vim'
 "Plug 'axvr/org.vim'
 Plug 'tpope/vim-cucumber'
 Plug 'leafgarland/typescript-vim'
@@ -83,7 +84,7 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 "==============MAPS===========================
 nmap spg :set spell spelllang=el<CR>
-nmap spu :set spell spelllang=en<CR>
+nmap spe :set spell spelllang=en<CR>
 nmap spn :set nospell<CR>
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 inoremap jk <ESC>
@@ -150,7 +151,10 @@ map <silent> _ :resize -5<CR>
 map <silent> + :resize +5<CR>
 map <silent> - :vertical resize -5<CR>
 map <silent> = :vertical resize +5<CR>
-nnoremap <silent> <leader>p :Telescope git_files<CR>
+nnoremap <silent> <leader>g :Telescope git_files<CR>
+nnoremap <silent> <leader>p :Telescope find_files<CR>
+nnoremap <silent> <leader>bl :Telescope buffers<CR>
+nnoremap <silent> <leader>bd :bdelete<CR>
 nmap <M-e> :NERDTreeToggle<CR>
 nmap <leader>m :MaximizerToggle<CR>
 nmap <leader>z :tabe %<CR>:VenterToggle<CR>
@@ -298,7 +302,7 @@ autocmd BufWritePost ~/.local/src/dwmblocks/config.h !cd ~/.local/src/dwmblocks/
 let g:tex_flavor = 'latex'
 au! BufRead,BufNewFile *.tex noremap <F12> :!setsid zathura "%:r.pdf"<CR>
 au! BufRead,BufNewFile *.tex set makeprg=make
-autocmd BufWritePost *.tex make
+"autocmd BufWritePost *.tex make
 
 "==========================Python=========================
 au BufNewFile,BufRead *.py map <F5> :CocCommand python.execInTerminal<CR>

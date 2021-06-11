@@ -11,7 +11,7 @@
     "dart"
   ],
   "java.errors.incompleteClasspath.severity": "ignore",
-  "flutter.lsp.debug": true,
+  "flutter.lsp.debug": false,
   "flutter.openDevLogSplitCommand": "botright 10split",
   "languageserver": {
     "ccls": {

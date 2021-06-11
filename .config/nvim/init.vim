@@ -45,6 +45,9 @@ Plug 'szw/vim-maximizer'
 Plug 'benmills/vimux'
 Plug 'bserem/vim-greek-spell'
 Plug 'dbeniamine/cheat.sh-vim'
+Plug 'tpope/vim-surround'
+Plug 'xavierchow/vim-swagger-preview'
+Plug 'vim-test/vim-test'
 
 " HTML
 Plug 'mattn/emmet-vim'
@@ -55,6 +58,12 @@ Plug 'Gavinok/vim-troff'
 
 " Latex
 Plug 'lervag/vimtex'
+
+" Rmarkdown
+Plug 'jalvesaq/Nvim-R'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+
 call plug#end()
 
 "==============Vim Settings=====================
@@ -155,9 +164,11 @@ nnoremap <silent> <leader>g :Telescope git_files<CR>
 nnoremap <silent> <leader>p :Telescope find_files<CR>
 nnoremap <silent> <leader>bl :Telescope buffers<CR>
 nnoremap <silent> <leader>bd :bdelete<CR>
+nnoremap <silent> <leader>bo :%bdelete<CR>:edit #<CR>:normal `"<CR>
 nmap <M-e> :NERDTreeToggle<CR>
 nmap <leader>m :MaximizerToggle<CR>
 nmap <leader>z :tabe %<CR>:VenterToggle<CR>
+nnoremap <silent> <leader>rt :TestSuite<CR>
 
 "===========VimSpector==============
 "nmap <leader>vb :call vimspector#ToggleBreakpoint()<CR>
@@ -211,11 +222,11 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
-  \ 'coc-tsserver',
   \ 'coc-prettier',
   \ 'coc-json',
   \ ]
 " \ 'coc-eslint',
+"\ 'coc-tsserver',
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 let g:coc_snippet_next = '<c-j>'
@@ -387,3 +398,6 @@ map υ y
 map ζ z
 map γ; gq
 map ψις ciw
+map ζζ zz
+map υι yi
+map δι di
